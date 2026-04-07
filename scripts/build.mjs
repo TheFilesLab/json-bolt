@@ -28,6 +28,9 @@ function createManifest(target, extensionVersion) {
         gecko: {
           id: 'json-bolt@thefileslab.com',
           strict_min_version: '121.0',
+          data_collection_permissions: {
+            required: ['none'],
+          },
         },
       },
     };
