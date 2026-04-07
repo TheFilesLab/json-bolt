@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "service": "json-bolt",
+    "version": "0.1.0",
+    "generatedAt": "2026-04-07T00:00:00Z"
+  },
+  "records": [
+    {
+      "id": 1,
+      "name": "alpha",
+      "active": true,
+      "stats": {
+        "count": 12,
+        "ratio": 0.41
+      }
+    },
+    {
+      "id": 2,
+      "name": "bravo",
+      "active": false,
+      "stats": {
+        "count": 5,
+        "ratio": 0.14
+      }
+    },
+    {
+      "id": 3,
+      "name": "charlie",
+      "active": true,
+      "stats": {
+        "count": 21,
+        "ratio": 0.77
+      }
+    },
+    {
+      "id": 4,
+      "name": "delta",
+      "active": true,
+      "stats": {
+        "count": 8,
+        "ratio": 0.22
+      }
+    },
+    {
+      "id": 5,
+      "name": "echo",
+      "active": false,
+      "stats": {
+        "count": 3,
+        "ratio": 0.09
+      }
+    }
+  ]
+}

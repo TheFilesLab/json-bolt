@@ -1,0 +1,97 @@
+{
+  "dataset": [
+    {
+      "id": 1,
+      "group": "north",
+      "active": true,
+      "values": [11, 13, 17, 19, 23],
+      "details": {
+        "owner": "team-a",
+        "region": "in",
+        "score": 91.3
+      }
+    },
+    {
+      "id": 2,
+      "group": "south",
+      "active": false,
+      "values": [2, 3, 5, 7, 11],
+      "details": {
+        "owner": "team-b",
+        "region": "us",
+        "score": 82.4
+      }
+    },
+    {
+      "id": 3,
+      "group": "east",
+      "active": true,
+      "values": [29, 31, 37, 41, 43],
+      "details": {
+        "owner": "team-c",
+        "region": "eu",
+        "score": 96.1
+      }
+    },
+    {
+      "id": 4,
+      "group": "west",
+      "active": true,
+      "values": [47, 53, 59, 61, 67],
+      "details": {
+        "owner": "team-d",
+        "region": "jp",
+        "score": 88.2
+      }
+    },
+    {
+      "id": 5,
+      "group": "north",
+      "active": false,
+      "values": [71, 73, 79, 83, 89],
+      "details": {
+        "owner": "team-e",
+        "region": "br",
+        "score": 74.5
+      }
+    },
+    {
+      "id": 6,
+      "group": "south",
+      "active": true,
+      "values": [97, 101, 103, 107, 109],
+      "details": {
+        "owner": "team-f",
+        "region": "au",
+        "score": 93.7
+      }
+    },
+    {
+      "id": 7,
+      "group": "east",
+      "active": false,
+      "values": [113, 127, 131, 137, 139],
+      "details": {
+        "owner": "team-g",
+        "region": "ca",
+        "score": 79.8
+      }
+    },
+    {
+      "id": 8,
+      "group": "west",
+      "active": true,
+      "values": [149, 151, 157, 163, 167],
+      "details": {
+        "owner": "team-h",
+        "region": "de",
+        "score": 97.4
+      }
+    }
+  ],
+  "summary": {
+    "total": 8,
+    "active": 5,
+    "groups": ["north", "south", "east", "west"]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "json-bolt",
+  "version": "0.1.0",
+  "description": "A zero-runtime-dependency browser extension for lightning-fast JSON formatting and highlighting.",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "node ./scripts/build.mjs chrome firefox",
+    "build:chrome": "node ./scripts/build.mjs chrome",
+    "build:firefox": "node ./scripts/build.mjs firefox",
+    "package:release": "node ./scripts/package-release.mjs",
+    "verify:release-tag": "node ./scripts/verify-release-tag.mjs",
+    "test": "node ./scripts/run-tests.mjs",
+    "benchmark": "node ./scripts/benchmark.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3"
+  }
+}

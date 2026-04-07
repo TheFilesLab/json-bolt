@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify tag matches package version
+        run: npm run verify:release-tag -- "${GITHUB_REF_NAME}"
+
+      - name: Run tests
+        run: npm test
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Build extension packages
+        run: npm run build
+
+      - name: Package Chrome and Firefox release assets
+        run: npm run package:release
+
+      - name: Publish GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" build/release-assets/*.zip \
+            --title "JSON Bolt ${GITHUB_REF_NAME}" \
+            --generate-notes

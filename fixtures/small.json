@@ -1,0 +1,9 @@
+{
+  "service": "json-bolt",
+  "enabled": true,
+  "limits": {
+    "indent": 2,
+    "nodes": 128
+  },
+  "tags": ["fast", "lightweight", "extension"]
+}
