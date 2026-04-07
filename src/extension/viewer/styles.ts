@@ -28,6 +28,8 @@ export const viewerStyles = `
     --jb-button-bg: rgba(255, 255, 255, 0.82);
     --jb-button-hover: rgba(15, 23, 42, 0.04);
     --jb-focus: rgba(37, 99, 235, 0.18);
+    --jb-gutter-width: 64px;
+    --jb-code-padding: 24px;
   }
 
   @media (prefers-color-scheme: dark) {
@@ -71,26 +73,27 @@ export const viewerStyles = `
   }
 
   body {
-    padding: 14px;
-    box-sizing: border-box;
+    min-height: 100vh;
   }
 
   .jb-app {
-    max-width: 1240px;
-    margin: 0 auto;
-    border: 1px solid var(--jb-border);
-    border-radius: 20px;
-    background: var(--jb-surface);
-    box-shadow: var(--jb-shadow);
-    overflow: hidden;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    background: var(--jb-surface-strong);
   }
 
   .jb-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
     display: grid;
-    gap: 14px;
-    padding: 14px 18px 12px;
+    gap: 12px;
+    padding: 12px 18px 14px;
     border-bottom: 1px solid var(--jb-header-border);
     background: var(--jb-header);
+    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(18px);
     user-select: none;
   }
 
@@ -104,22 +107,22 @@ export const viewerStyles = `
 
   .jb-brand {
     display: grid;
-    gap: 5px;
+    gap: 4px;
     min-width: 0;
   }
 
   .jb-brand-eyebrow {
     color: var(--jb-header-subtle);
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 600;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
   }
 
   .jb-brand-title {
     color: var(--jb-header-text);
-    font-size: 1.05rem;
-    font-weight: 650;
+    font-size: 1rem;
+    font-weight: 640;
     letter-spacing: -0.03em;
   }
 
@@ -129,7 +132,7 @@ export const viewerStyles = `
     gap: 8px;
     flex-wrap: wrap;
     color: var(--jb-header-muted);
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     line-height: 1.35;
   }
 
@@ -143,7 +146,7 @@ export const viewerStyles = `
 
   .jb-request-path {
     max-width: 100%;
-    padding: 0.18rem 0.5rem;
+    padding: 0.18rem 0.48rem;
     border: 1px solid var(--jb-header-chip-border);
     border-radius: 999px;
     background: var(--jb-header-chip);
@@ -153,7 +156,7 @@ export const viewerStyles = `
       'SFMono-Regular',
       ui-monospace,
       monospace;
-    font-size: 0.74rem;
+    font-size: 0.72rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -172,11 +175,11 @@ export const viewerStyles = `
     cursor: pointer;
     padding: 6px 10px;
     border: 1px solid var(--jb-header-chip-border);
-    border-radius: 10px;
+    border-radius: 9px;
     background: var(--jb-button-bg);
     color: var(--jb-header-text);
     font: inherit;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: 550;
     line-height: 1.2;
     transition:
@@ -192,7 +195,8 @@ export const viewerStyles = `
   }
 
   .jb-button:focus-visible,
-  .jb-toggle:focus-visible {
+  .jb-toggle:focus-visible,
+  .jb-viewer:focus-visible {
     outline: none;
     box-shadow: 0 0 0 4px var(--jb-focus);
   }
@@ -205,23 +209,23 @@ export const viewerStyles = `
 
   .jb-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
     gap: 6px;
   }
 
   .jb-stat {
     display: grid;
-    gap: 3px;
-    min-height: 50px;
+    gap: 2px;
+    min-height: 46px;
     padding: 8px 10px;
     border: 1px solid var(--jb-header-chip-border);
-    border-radius: 12px;
+    border-radius: 10px;
     background: var(--jb-header-chip);
   }
 
   .jb-stat-label {
     color: var(--jb-header-subtle);
-    font-size: 0.66rem;
+    font-size: 0.64rem;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -229,27 +233,28 @@ export const viewerStyles = `
 
   .jb-stat-value {
     color: var(--jb-header-text);
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     font-weight: 620;
     letter-spacing: -0.015em;
   }
 
   .jb-content {
-    padding: 0;
+    min-height: 0;
     overflow: auto;
     background: var(--jb-surface-strong);
   }
 
   .jb-json-pane {
+    min-height: 100%;
+    padding: 10px 0 28px;
     user-select: text;
   }
 
   .jb-viewer {
-    margin: 0;
-    padding: 16px 18px 22px;
-    min-height: 68vh;
+    min-width: max-content;
+    min-height: calc(100vh - 168px);
     box-sizing: border-box;
-    overflow: auto;
+    overflow: visible;
     color: var(--jb-text);
     font-family:
       'JetBrains Mono',
@@ -257,22 +262,62 @@ export const viewerStyles = `
       ui-monospace,
       monospace;
     font-size: 12.5px;
-    line-height: 1.6;
-    white-space: pre;
+    line-height: 1.65;
     tab-size: 2;
   }
 
+  .jb-json-tree {
+    counter-reset: jb-line;
+  }
+
+  .jb-line {
+    display: grid;
+    grid-template-columns: var(--jb-gutter-width) minmax(0, 1fr);
+    align-items: baseline;
+    min-width: max-content;
+  }
+
+  .jb-line-number {
+    position: sticky;
+    left: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-self: stretch;
+    padding: 0 14px 0 16px;
+    background:
+      linear-gradient(90deg, var(--jb-surface-strong) 0%, var(--jb-surface-strong) 84%, transparent 100%);
+    box-shadow: inset -1px 0 0 var(--jb-border);
+    color: var(--jb-text-subtle);
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .jb-line-number::before {
+    counter-increment: jb-line;
+    content: counter(jb-line);
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.65;
+  }
+
+  .jb-line-text {
+    display: block;
+    padding: 0 var(--jb-code-padding) 0 18px;
+    white-space: pre;
+  }
+
   .jb-node.is-collapsed > .jb-children,
-  .jb-node.is-collapsed > .jb-close {
+  .jb-node.is-collapsed > .jb-line-close {
     display: none;
   }
 
-  .jb-node > .jb-summary {
+  .jb-node > .jb-line-open .jb-summary {
     display: none;
+    margin-left: 10px;
     color: var(--jb-text-muted);
   }
 
-  .jb-node.is-collapsed > .jb-summary {
+  .jb-node.is-collapsed > .jb-line-open .jb-summary {
     display: inline;
   }
 
@@ -319,16 +364,24 @@ export const viewerStyles = `
   @media (max-width: 720px) {
     body {
       padding: 10px;
+      box-sizing: border-box;
     }
 
-    .jb-toolbar,
-    .jb-viewer {
-      padding-left: 14px;
-      padding-right: 14px;
+    .jb-app {
+      min-height: calc(100vh - 20px);
+      border: 1px solid var(--jb-border);
+      border-radius: 18px;
+      box-shadow: var(--jb-shadow);
+      overflow: hidden;
     }
 
     .jb-toolbar {
+      padding: 12px 14px;
       gap: 10px;
+    }
+
+    .jb-request-path {
+      max-width: min(100%, 100vw - 72px);
     }
 
     .jb-stats {
@@ -343,6 +396,23 @@ export const viewerStyles = `
 
     .jb-button {
       flex: 0 0 auto;
+    }
+
+    .jb-viewer {
+      min-height: calc(100vh - 248px);
+    }
+
+    .jb-line {
+      grid-template-columns: 54px minmax(0, 1fr);
+    }
+
+    .jb-line-number {
+      padding: 0 10px;
+    }
+
+    .jb-line-text {
+      padding-left: 12px;
+      padding-right: 16px;
     }
   }
 `;

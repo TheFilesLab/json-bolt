@@ -33,8 +33,8 @@ export function createViewerMarkup(
     `<div class="jb-stats">${createMetadataCards(model.metadata)}</div>`,
     '</section>',
     '<main class="jb-content">',
-    `<div class="jb-json-pane" ${JSON_SELECTION_ATTRIBUTE}="${JSON_SELECTION_VALUE}">`,
-    `<pre class="jb-viewer" tabindex="0">${model.html}</pre>`,
+    '<div class="jb-json-pane">',
+    `<div class="jb-viewer" tabindex="0" ${JSON_SELECTION_ATTRIBUTE}="${JSON_SELECTION_VALUE}">${model.html}</div>`,
     '</div>',
     '</main>',
     '</div>',
@@ -90,7 +90,7 @@ async function copyText(text: string): Promise<boolean> {
 function toggleNode(node: HTMLElement, collapsed: boolean): void {
   node.classList.toggle('is-collapsed', collapsed);
 
-  const button = node.querySelector<HTMLButtonElement>(':scope > .jb-toggle');
+  const button = node.querySelector<HTMLButtonElement>(':scope > .jb-line-open .jb-toggle');
 
   if (button) {
     button.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
@@ -119,9 +119,7 @@ function isEditableTarget(target: EventTarget | null): boolean {
 }
 
 function getJsonSelectionContainer(root: HTMLElement): HTMLElement | null {
-  return root.querySelector<HTMLElement>(
-    `.jb-json-pane[${JSON_SELECTION_ATTRIBUTE}="${JSON_SELECTION_VALUE}"]`,
-  );
+  return root.querySelector<HTMLElement>(`[${JSON_SELECTION_ATTRIBUTE}="${JSON_SELECTION_VALUE}"]`);
 }
 
 function selectJsonContent(root: HTMLElement): boolean {

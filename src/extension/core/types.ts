@@ -58,6 +58,7 @@ export interface RenderResult {
   rawText: string;
   html: string;
   formattedText: string;
+  lineCount: number;
   metadata: ViewerMetadata;
   collapseIndex: number;
 }

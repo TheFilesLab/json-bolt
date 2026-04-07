@@ -193,18 +193,21 @@ test('renderer creates collapsible nodes for nested objects and arrays', () => {
   );
 
   assert.ok(result.html.includes('class="jb-node"'));
+  assert.ok(result.html.includes('class="jb-line-number"'));
   assert.ok(result.html.includes('aria-label="Toggle array"'));
   assert.ok(result.html.includes('aria-label="Toggle object"'));
   assert.equal(result.collapseIndex, 5);
+  assert.equal(result.lineCount, result.formattedText.split('\n').length);
   assert.match(result.formattedText, /"items": \[/);
 });
 
 test('rendered markup exposes a dedicated JSON content selection target', () => {
   const markup = internals.createViewerMarkup(
     {
-      html: '<span class="jb-number">1</span>',
+      html: '<div class="jb-json-tree"><div class="jb-line"><span class="jb-line-number" aria-hidden="true"></span><span class="jb-line-text"><span class="jb-number">1</span></span></div></div>',
       rawText: '{"ok":true}',
       formattedText: '{\n  "ok": true\n}',
+      lineCount: 3,
       collapseIndex: 0,
       detection: {
         matches: true,
@@ -231,7 +234,8 @@ test('rendered markup exposes a dedicated JSON content selection target', () => 
   );
 
   assert.match(markup, /data-jb-selection="json-content"/);
-  assert.match(markup, /<div class="jb-json-pane" data-jb-selection="json-content">/);
+  assert.match(markup, /<div class="jb-viewer" tabindex="0" data-jb-selection="json-content">/);
+  assert.match(markup, /class="jb-line-number"/);
 });
 
 test('renderer metadata includes response timing when available', () => {

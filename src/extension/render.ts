@@ -51,6 +51,20 @@ function renderPrimitiveValue(value: JsonPrimitive): { html: string; text: strin
   };
 }
 
+function renderLine(content: string, variant: 'close' | 'default' | 'open' = 'default'): string {
+  const className =
+    variant === 'default'
+      ? 'jb-line'
+      : `jb-line ${variant === 'open' ? 'jb-line-open' : 'jb-line-close'}`;
+
+  return [
+    `<div class="${className}">`,
+    '<span class="jb-line-number" aria-hidden="true"></span>',
+    `<span class="jb-line-text">${content}</span>`,
+    '</div>',
+  ].join('');
+}
+
 export function renderParsedValue(
   value: JsonValue,
   rawText: string,
@@ -75,6 +89,17 @@ export function renderParsedValue(
   let propertyCount = 0;
   let itemCount = 0;
   let nodeCount = 0;
+  let lineCount = 0;
+
+  const pushLine = (
+    htmlContent: string,
+    textContent: string,
+    variant: 'close' | 'default' | 'open' = 'default',
+  ): void => {
+    htmlParts.push(renderLine(htmlContent, variant));
+    formattedParts.push(textContent, '\n');
+    lineCount += 1;
+  };
 
   while (stack.length > 0) {
     const task = stack.pop();
@@ -89,12 +114,15 @@ export function renderParsedValue(
       const indent = getIndent(options.indentSize, task.indentLevel);
 
       htmlParts.push(
-        '</span>',
-        indent,
-        `<span class="jb-close"><span class="jb-brace">${task.closingBracket}</span>${commaHtml}</span>`,
-        '</span>\n',
+        '</div>',
+        renderLine(
+          `${indent}<span class="jb-brace">${task.closingBracket}</span>${commaHtml}`,
+          'close',
+        ),
+        '</div>',
       );
       formattedParts.push(indent, task.closingBracket, commaText, '\n');
+      lineCount += 1;
       continue;
     }
 
@@ -113,8 +141,10 @@ export function renderParsedValue(
     if (valueIsPrimitive(task.value)) {
       const primitive = renderPrimitiveValue(task.value);
 
-      htmlParts.push(keyPrefixHtml, primitive.html, commaHtml, '\n');
-      formattedParts.push(keyPrefixText, primitive.text, commaText, '\n');
+      pushLine(
+        keyPrefixHtml + primitive.html + commaHtml,
+        keyPrefixText + primitive.text + commaText,
+      );
       continue;
     }
 
@@ -122,8 +152,10 @@ export function renderParsedValue(
       itemCount += task.value.length;
 
       if (task.value.length === 0) {
-        htmlParts.push(keyPrefixHtml, '<span class="jb-brace">[]</span>', commaHtml, '\n');
-        formattedParts.push(keyPrefixText, '[]', commaText, '\n');
+        pushLine(
+          keyPrefixHtml + '<span class="jb-brace">[]</span>' + commaHtml,
+          keyPrefixText + '[]' + commaText,
+        );
         continue;
       }
 
@@ -134,15 +166,21 @@ export function renderParsedValue(
       collapseIndex += 1;
 
       htmlParts.push(
-        keyPrefixHtml,
-        `<span class="jb-node${collapsedClass}" data-node-id="${String(nodeId)}">`,
-        `<button class="jb-toggle" type="button" data-node-id="${String(nodeId)}" aria-expanded="${expandedState}" aria-label="Toggle array">`,
-        '<span class="jb-brace">[</span>',
-        '</button>',
-        `<span class="jb-summary">${escapeHtml(summarizeContainer(']', task.value.length))}</span>`,
-        '<span class="jb-children">\n',
+        `<div class="jb-node${collapsedClass}" data-node-id="${String(nodeId)}">`,
+        renderLine(
+          [
+            keyPrefixHtml,
+            `<button class="jb-toggle" type="button" data-node-id="${String(nodeId)}" aria-expanded="${expandedState}" aria-label="Toggle array">`,
+            '<span class="jb-brace">[</span>',
+            '</button>',
+            `<span class="jb-summary">${escapeHtml(summarizeContainer(']', task.value.length))}</span>`,
+          ].join(''),
+          'open',
+        ),
+        '<div class="jb-children">',
       );
       formattedParts.push(keyPrefixText, '[\n');
+      lineCount += 1;
 
       stack.push({
         kind: 'close',
@@ -168,8 +206,10 @@ export function renderParsedValue(
     propertyCount += entries.length;
 
     if (entries.length === 0) {
-      htmlParts.push(keyPrefixHtml, '<span class="jb-brace">{}</span>', commaHtml, '\n');
-      formattedParts.push(keyPrefixText, '{}', commaText, '\n');
+      pushLine(
+        keyPrefixHtml + '<span class="jb-brace">{}</span>' + commaHtml,
+        keyPrefixText + '{}' + commaText,
+      );
       continue;
     }
 
@@ -180,15 +220,21 @@ export function renderParsedValue(
     collapseIndex += 1;
 
     htmlParts.push(
-      keyPrefixHtml,
-      `<span class="jb-node${collapsedClass}" data-node-id="${String(nodeId)}">`,
-      `<button class="jb-toggle" type="button" data-node-id="${String(nodeId)}" aria-expanded="${expandedState}" aria-label="Toggle object">`,
-      '<span class="jb-brace">{</span>',
-      '</button>',
-      `<span class="jb-summary">${escapeHtml(summarizeContainer('}', entries.length))}</span>`,
-      '<span class="jb-children">\n',
+      `<div class="jb-node${collapsedClass}" data-node-id="${String(nodeId)}">`,
+      renderLine(
+        [
+          keyPrefixHtml,
+          `<button class="jb-toggle" type="button" data-node-id="${String(nodeId)}" aria-expanded="${expandedState}" aria-label="Toggle object">`,
+          '<span class="jb-brace">{</span>',
+          '</button>',
+          `<span class="jb-summary">${escapeHtml(summarizeContainer('}', entries.length))}</span>`,
+        ].join(''),
+        'open',
+      ),
+      '<div class="jb-children">',
     );
     formattedParts.push(keyPrefixText, '{\n');
+    lineCount += 1;
 
     stack.push({
       kind: 'close',
@@ -216,8 +262,9 @@ export function renderParsedValue(
   return {
     value,
     rawText,
-    html,
+    html: `<div class="jb-json-tree">${html}</div>`,
     formattedText,
+    lineCount,
     metadata: {
       topLevelType: getTopLevelType(value),
       bytes: new TextEncoder().encode(rawText).byteLength,
