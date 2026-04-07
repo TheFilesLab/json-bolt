@@ -1,6 +1,6 @@
 {
   "name": "json-bolt",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A zero-runtime-dependency browser extension for lightning-fast JSON formatting and highlighting.",
   "license": "MIT",
   "private": true,
