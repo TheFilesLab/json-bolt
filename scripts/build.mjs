@@ -26,6 +26,7 @@ function createManifest(target, extensionVersion) {
       ...base,
       browser_specific_settings: {
         gecko: {
+          id: 'json-bolt@thefileslab.com',
           strict_min_version: '121.0',
         },
       },
